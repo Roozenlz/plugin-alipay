@@ -32,7 +32,7 @@ public class MyEndPoint implements CustomEndpoint {
                         .tag("api.store.kunkunyu.com/v1alpha1/qrcode")
                         .response(
                             responseBuilder()
-                                .implementation(ListResult.generateGenericClass(String.class))
+                                .implementation(ListResult.generateGenericClass(Test.class))
                         );
                 }
             ).build();
@@ -56,7 +56,7 @@ public class MyEndPoint implements CustomEndpoint {
         //     System.err.println("调用遭遇异常，原因：" + e.getMessage());
         //     throw new RuntimeException(e.getMessage(), e);
         // }
-        return null;
+        return ServerResponse.ok().build();
     }
 
     @Override

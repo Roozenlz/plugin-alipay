@@ -20,17 +20,20 @@ dependencies {
     implementation platform('run.halo.tools.platform:plugin:2.20.0-SNAPSHOT')
     compileOnly 'run.halo.app:api'
 
-//    implementation('com.alipay.sdk:alipay-easysdk:2.2.3') {
-//        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
-//        exclude group: 'com.google.guava', module: 'guava'
-//        exclude group: 'com.google.code.gson', module: 'gson'
-//        exclude group: 'org.slf4j', module: 'slf4j-api'
-//        exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
-//    }
+    implementation('com.alipay.sdk:alipay-easysdk:2.2.3') {
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+        exclude group: 'com.google.guava', module: 'guava'
+        exclude group: 'com.google.code.gson', module: 'gson'
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+        exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
+    }
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
 //    implementation 'com.google.code.gson:gson:2.11.0'
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
 //    implementation 'org.bouncycastle:bcprov-jdk18on:1.79'
+    // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+
 
     testImplementation 'run.halo.app:api'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
