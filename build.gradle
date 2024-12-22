@@ -7,6 +7,7 @@ plugins {
 
 group 'run.halo.starter'
 sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
@@ -18,6 +19,18 @@ repositories {
 dependencies {
     implementation platform('run.halo.tools.platform:plugin:2.20.0-SNAPSHOT')
     compileOnly 'run.halo.app:api'
+
+//    implementation('com.alipay.sdk:alipay-easysdk:2.2.3') {
+//        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+//        exclude group: 'com.google.guava', module: 'guava'
+//        exclude group: 'com.google.code.gson', module: 'gson'
+//        exclude group: 'org.slf4j', module: 'slf4j-api'
+//        exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
+//    }
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+//    implementation 'com.google.code.gson:gson:2.11.0'
+    // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
+//    implementation 'org.bouncycastle:bcprov-jdk18on:1.79'
 
     testImplementation 'run.halo.app:api'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -31,26 +44,43 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
 }
 
-node {
-    nodeProjectDir = file("${project.projectDir}/ui")
-}
-
-tasks.register('buildFrontend', PnpmTask) {
-    args = ['build']
-    dependsOn('installDepsForUI')
-}
-
-tasks.register('installDepsForUI', PnpmTask) {
-    args = ['install']
-}
-
-build {
-    // build frontend before build
-    tasks.named('compileJava').configure {
-        dependsOn('buildFrontend')
-    }
-}
+//node {
+//    nodeProjectDir = file("${project.projectDir}/ui")
+//}
+//
+//tasks.register('buildFrontend', PnpmTask) {
+//    args = ['build']
+//    dependsOn('installDepsForUI')
+//}
+//
+//tasks.register('installDepsForUI', PnpmTask) {
+//    args = ['install']
+//}
+//
+//build {
+//    // build frontend before build
+//    tasks.named('compileJava').configure {
+//        dependsOn('buildFrontend')
+//    }
+//}
 
 halo {
     version = '2.20'
+    superAdminUsername = 'admin'
+    superAdminPassword = 'admin'
+    externalUrl = 'http://localhost:8090'
+    docker {
+        // windows 需要改为 npipe:////./pipe/docker_engine
+        // linux、macos 需要改为 unix:///var/run/docker.sock
+        url = 'unix:///var/run/docker.sock'
+        apiVersion = '1.45'
+    }
+    port = 8090
+
+    // 开启 debug 断点模式
+    debug = true
+    debugPort = 5005
+
+    // 控制台会挂起，等待点击 Attach debugger 按钮
+    suspend = true
 }
