@@ -2,6 +2,9 @@ package run.halo.starter;
 
 import static org.springdoc.core.fn.builders.apiresponse.Builder.responseBuilder;
 
+import com.alipay.easysdk.factory.Factory;
+import com.alipay.easysdk.kernel.util.ResponseChecker;
+import com.alipay.easysdk.payment.facetoface.models.AlipayTradePrecreateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.webflux.core.fn.SpringdocRouteBuilder;
@@ -29,7 +32,7 @@ public class MyEndPoint implements CustomEndpoint {
         return SpringdocRouteBuilder.route()
             .GET("qrcode", this::getQRCode, builder -> {
                     builder.operationId("qrcode")
-                        .tag("api.store.kunkunyu.com/v1alpha1/qrcode")
+                        .tag("api.roozen.com/v1alpha1/qrcode")
                         .response(
                             responseBuilder()
                                 .implementation(ListResult.generateGenericClass(Test.class))
@@ -39,28 +42,28 @@ public class MyEndPoint implements CustomEndpoint {
     }
 
     Mono<ServerResponse> getQRCode(ServerRequest serverRequest) {
-        // try {
-        //     // 2. 发起API调用（以创建当面付收款二维码为例）
-        //     AlipayTradePrecreateResponse response = Factory.Payment.FaceToFace()
-        //         .preCreate("Apple iPhone11 128G", "2234567890", "5799.00");
-        //     // 3. 处理响应或异常
-        //     if (ResponseChecker.success(response)) {
-        //         System.out.println("调用成功");
-        //         System.out.println(response);
-        //         System.out.println("qrCode:");
-        //         System.out.println(response.qrCode);
-        //     } else {
-        //         System.err.println("调用失败，原因：" + response.msg + "，" + response.subMsg);
-        //     }
-        // } catch (Exception e) {
-        //     System.err.println("调用遭遇异常，原因：" + e.getMessage());
-        //     throw new RuntimeException(e.getMessage(), e);
-        // }
+        try {
+            // 2. 发起API调用（以创建当面付收款二维码为例）
+            AlipayTradePrecreateResponse response = Factory.Payment.FaceToFace()
+                .preCreate("Apple iPhone11 128G", "2234567890", "5799.00");
+            // 3. 处理响应或异常
+            if (ResponseChecker.success(response)) {
+                System.out.println("调用成功");
+                System.out.println(response);
+                System.out.println("qrCode:");
+                System.out.println(response.qrCode);
+            } else {
+                System.err.println("调用失败，原因：" + response.msg + "，" + response.subMsg);
+            }
+        } catch (Exception e) {
+            System.err.println("调用遭遇异常，原因：" + e.getMessage());
+            throw new RuntimeException(e.getMessage(), e);
+        }
         return ServerResponse.ok().build();
     }
 
     @Override
     public GroupVersion groupVersion() {
-        return GroupVersion.parseAPIVersion("api.store.kunkunyu.com/v1alpha1");
+        return GroupVersion.parseAPIVersion("api.roozen.com/v1alpha1");
     }
 }

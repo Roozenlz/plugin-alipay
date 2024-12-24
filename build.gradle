@@ -20,19 +20,26 @@ dependencies {
     implementation platform('run.halo.tools.platform:plugin:2.20.0-SNAPSHOT')
     compileOnly 'run.halo.app:api'
 
+    // 单独引入 'com.alipay.sdk:alipay-easysdk:2.2.3' 会有问题
+//    implementation 'com.alipay.sdk:alipay-easysdk:2.2.3'
+
     implementation('com.alipay.sdk:alipay-easysdk:2.2.3') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'org.slf4j', module: 'slf4j-api'
-        exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
+        exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'  // 排除此依赖正常，但是alipay依赖这个库，调用api会class not fount
     }
+
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
 //    implementation 'com.google.code.gson:gson:2.11.0'
+
+
+    // 尝试新版本一样会出问题
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
 //    implementation 'org.bouncycastle:bcprov-jdk18on:1.79'
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
-    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+//    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
 
 
     testImplementation 'run.halo.app:api'
@@ -47,25 +54,25 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
 }
 
-//node {
-//    nodeProjectDir = file("${project.projectDir}/ui")
-//}
-//
-//tasks.register('buildFrontend', PnpmTask) {
-//    args = ['build']
-//    dependsOn('installDepsForUI')
-//}
-//
-//tasks.register('installDepsForUI', PnpmTask) {
-//    args = ['install']
-//}
-//
-//build {
-//    // build frontend before build
-//    tasks.named('compileJava').configure {
-//        dependsOn('buildFrontend')
-//    }
-//}
+node {
+    nodeProjectDir = file("${project.projectDir}/ui")
+}
+
+tasks.register('buildFrontend', PnpmTask) {
+    args = ['build']
+    dependsOn('installDepsForUI')
+}
+
+tasks.register('installDepsForUI', PnpmTask) {
+    args = ['install']
+}
+
+build {
+    // build frontend before build
+    tasks.named('compileJava').configure {
+        dependsOn('buildFrontend')
+    }
+}
 
 halo {
     version = '2.20'
